@@ -6,27 +6,24 @@ import asyncHandler from "../utils/asyncHandler";
 import { Request, Response } from "express";
 import { deleteImage } from "../service/delete.file";
 import { uploadImageFile } from "../service/upload.file";
-// import {
-//   imageServiceCreate,
-//   imageServiceUpdate,
-// } from "../service/image.service";
+import bcrypt from "bcrypt";
 
 const createUser = asyncHandler(async (req: Request, res: Response) => {
   const reqBody = req.body;
+  const email = reqBody.email.trim().toLowerCase();
 
   const userExist = await prisma.user.findUnique({
-    where: { email: reqBody.email },
+    where: { email: email },
   });
 
   if (userExist) throw new HttpException(400, "User already exist");
 
-  // const password = reqBody?.password;
+  const password = reqBody?.password;
 
-  // const hashpassword = 
-  
+  const hashpassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
-    data: reqBody,
+    data: { ...reqBody, email, password: hashpassword },
     select: {
       id: true,
       name: true,

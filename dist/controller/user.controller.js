@@ -19,19 +19,19 @@ const HttpException_1 = __importDefault(require("../utils/HttpException"));
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const delete_file_1 = require("../service/delete.file");
 const upload_file_1 = require("../service/upload.file");
-// import {
-//   imageServiceCreate,
-//   imageServiceUpdate,
-// } from "../service/image.service";
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUser = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const reqBody = req.body;
+    const email = reqBody.email.trim().toLowerCase();
     const userExist = yield prisma_1.default.user.findUnique({
-        where: { email: reqBody.email },
+        where: { email: email },
     });
     if (userExist)
         throw new HttpException_1.default(400, "User already exist");
+    const password = reqBody === null || reqBody === void 0 ? void 0 : reqBody.password;
+    const hashpassword = yield bcrypt_1.default.hash(password, 10);
     const user = yield prisma_1.default.user.create({
-        data: reqBody,
+        data: Object.assign(Object.assign({}, reqBody), { email, password: hashpassword }),
         select: {
             id: true,
             name: true,
