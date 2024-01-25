@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "eslint --ext .ts --fix src && tsc",
     "start:prod": "nodemon dist/index.js",
+    "prod:build": "npm i && npm run build && npm run prisma:generate && npm run db:push",
     "prisma:generate": "npx prisma generate",
     "dev:start": "nodemon src/index.ts",
     "db:push": "npx prisma db push",
