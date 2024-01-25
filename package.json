@@ -1,0 +1,37 @@
+{
+  "name": "reservation-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "eslint --ext .ts --fix src && tsc",
+    "start:prod": "nodemon dist/index.js",
+    "prisma:generate": "npx prisma generate",
+    "dev:start": "nodemon src/index.ts",
+    "db:push": "npx prisma db push",
+    "db:pull": "npx prisma db pull"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "bcrypt": "^5.1.1",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.3",
+    "prisma": "^5.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.1",
+    "cloudinary": "^1.41.3",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "zod": "^3.22.4"
+  }
+}
