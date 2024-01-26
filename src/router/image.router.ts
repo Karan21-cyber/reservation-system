@@ -4,10 +4,13 @@ import upload from "../service/upload.file";
 
 const router = Router();
 router.put(
-  "/v1/user/multipleimage/:id",
+  "/v1/multipleimage/:id",
   upload.array("images"),
   imageController.multipleImage
 );
+
+router.get("/v1/multipleimage/:id", imageController.getMultipleImageById);
+router.get("/v1/multipleimage", imageController.getAllImages);
 
 const imageRouter = router;
 export default imageRouter;

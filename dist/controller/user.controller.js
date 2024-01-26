@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const prisma_1 = __importDefault(require("../prisma"));
 const HttpException_1 = __importDefault(require("../utils/HttpException"));
@@ -51,7 +50,7 @@ const createUser = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, v
 const uploadImage = (req, // Correcting the type of 'files'
 res) => __awaiter(void 0, void 0, void 0, function* () {
     const reqBody = req === null || req === void 0 ? void 0 : req.file;
-    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    const { id } = (req === null || req === void 0 ? void 0 : req.params) || {};
     const filePath = reqBody === null || reqBody === void 0 ? void 0 : reqBody.path;
     const userImage = yield (0, user_service_1.getUserDataById)(id);
     let result;
@@ -89,9 +88,29 @@ const getUserById = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, 
         data: user,
     });
 }));
+const getAllUser = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield prisma_1.default.user.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            address: true,
+            image: true,
+            createdAt: true,
+            updatedAt: true,
+        },
+    });
+    return res.status(200).json({
+        success: true,
+        message: "Users fetched successfully",
+        data: users,
+    });
+}));
 const userController = {
     createUser,
     uploadImage,
     getUserById,
+    getAllUser,
 };
 exports.default = userController;

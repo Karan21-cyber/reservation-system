@@ -1,4 +1,3 @@
-/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "../prisma";
 import HttpException from "../utils/HttpException";
@@ -47,7 +46,7 @@ const uploadImage = async (
   res: Response
 ) => {
   const reqBody = req?.file;
-  const { id }: any = req?.params;
+  const { id }: any = req?.params || {};
 
   const filePath = reqBody?.path as any;
 
@@ -94,10 +93,33 @@ const getUserById = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const getAllUser = asyncHandler(async (req: Request, res: Response) => {
+  
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      address: true,
+      image: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Users fetched successfully",
+    data: users,
+  });
+});
+
 const userController = {
   createUser,
   uploadImage,
   getUserById,
+  getAllUser,
 };
 
 export default userController;

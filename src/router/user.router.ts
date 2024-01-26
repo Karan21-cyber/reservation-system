@@ -1,16 +1,17 @@
 import { Router } from "express";
-import asyncHandler from "../utils/asyncHandler";
 import userController from "../controller/user.controller";
 import upload from "../service/upload.file";
 
 const router = Router();
 
-router.post("/v1/user", asyncHandler(userController.createUser));
-router.get("/v1/user/:id", asyncHandler(userController.getUserById));
+router.post("/v1/user", userController.createUser);
+router.get("/v1/user/:id", userController.getUserById);
+router.get("/v1/user", userController.getAllUser);
+
 router.put(
   "/v1/user/image/:id",
   upload.single("image"),
-  asyncHandler(userController.uploadImage)
+  userController.uploadImage
 );
 
 const userRouter = router;

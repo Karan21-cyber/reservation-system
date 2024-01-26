@@ -11,7 +11,6 @@ const multipleImage = asyncHandler(
     const reqBody = req.files;
     const { id } = req.params;
 
-    console.log("filePath: ", reqBody);
     const imageUrlList: string[] = [];
 
     await Promise.all(
@@ -23,17 +22,20 @@ const multipleImage = asyncHandler(
     );
 
     // update user
-    const result = await prisma.images.create({
-      data: {
-        images: imageUrlList as string[],
-        userId: id as string,
-      },
-    });
+    await Promise.all(
+      imageUrlList?.map(async (image: string) => {
+        await prisma.images.create({
+          data: {
+            imageUrl: image,
+            userId: id as string,
+          },
+        });
+      })
+    );
 
     return res.status(200).json({
       success: true,
       message: "Files uploaded successfully",
-      data: result,
     });
   }
 );
@@ -56,9 +58,31 @@ const getMultipleImageById = asyncHandler(
   }
 );
 
+const getAllImages = asyncHandler(async (req: Request, res: Response) => {
+  const { limit, page } = req.query;
+
+  const allimages = await prisma.images.findMany({
+    ...(limit && { take: Number(limit) }),
+    ...(limit && page && { skip: Number(limit) * (Number(page) - 1) }),
+  });
+
+  return res.status(200).json({
+    success: true,
+    docs: {
+      total: allimages.length,
+      page: page,
+      limit: limit,
+    },
+    message: "Images fetched successfully",
+    data: allimages,
+  });
+  
+});
+
 const imageController = {
   multipleImage,
   getMultipleImageById,
+  getAllImages,
 };
 
 export default imageController;
