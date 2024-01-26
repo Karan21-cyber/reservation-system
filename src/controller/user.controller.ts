@@ -7,14 +7,13 @@ import { Request, Response } from "express";
 import { deleteImage } from "../service/delete.file";
 import { uploadImageFile } from "../service/upload.file";
 import bcrypt from "bcrypt";
+import { getUserByEmail, getUserDataById } from "../service/user.service";
 
 const createUser = asyncHandler(async (req: Request, res: Response) => {
   const reqBody = req.body;
   const email = reqBody.email.trim().toLowerCase();
 
-  const userExist = await prisma.user.findUnique({
-    where: { email: email },
-  });
+  const userExist = await getUserByEmail(email);
 
   if (userExist) throw new HttpException(400, "User already exist");
 
@@ -52,9 +51,7 @@ const uploadImage = async (
 
   const filePath = reqBody?.path as any;
 
-  const userImage = await prisma?.user?.findUnique({
-    where: { id: id as string },
-  });
+  const userImage = await getUserDataById(id);
 
   let result;
   //   delete previous image and upload new image
@@ -88,20 +85,7 @@ const uploadImage = async (
 
 const getUserById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await prisma.user.findUnique({
-    where: { id: id },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phone: true,
-      address: true,
-      role: true,
-      image: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  const user = await getUserDataById(id);
 
   return res.status(200).json({
     success: true,

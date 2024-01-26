@@ -12,12 +12,9 @@ export default upload;
 
 export const uploadImageFile = async (filePath: any) => {
   const result = await cloudinary.uploader.upload(filePath);
-  (error: any) => {
-    if (error) {
-      throw new HttpException(400, "Unable to upload file.");
-    }
-    fs.unlinkSync(filePath);
-  };
-
+  if (!result) {
+    throw new HttpException(400, "Unable to upload file.");
+  }
+  fs.unlinkSync(filePath);
   return result;
 };

@@ -15,5 +15,7 @@ router.get("/v1/video", videoController.getAllVideos);
 
 router.delete("/v1/video", videoController.deleteVideo);
 
+
+
 const videoRouter = router;
 export default videoRouter;

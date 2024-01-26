@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
-// import prisma from "../prisma";
+
 import asyncHandler from "../utils/asyncHandler";
 import { getVideoId } from "../service/getId.service";
 import {
@@ -97,11 +97,13 @@ const deleteVideo = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+
 const videoController = {
   uploadVideo,
   deleteVideo,
   getAllVideos,
   getVideosById,
+  
 };
 
 export default videoController;

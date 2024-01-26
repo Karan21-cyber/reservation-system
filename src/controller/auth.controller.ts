@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
-import prisma from "../prisma";
 import HttpException from "../utils/HttpException";
 import asyncHandler from "../utils/asyncHandler";
 import bcrypt from "bcrypt";
+import { getUserByEmail } from "../service/user.service";
 
 const userLogin = asyncHandler(async (req: Request, res: Response) => {
   const reqBody = req.body;
   const email = reqBody.email.trim().toLowerCase();
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
+
+  const user = await getUserByEmail(email);
 
   if (!user) throw new HttpException(400, "User not found");
 

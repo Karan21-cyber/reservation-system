@@ -19,6 +19,7 @@ const error_middleware_1 = __importDefault(require("./middleware/error.middlewar
 const user_router_1 = __importDefault(require("./router/user.router"));
 const auth_router_1 = __importDefault(require("./router/auth.router"));
 const video_router_1 = __importDefault(require("./router/video.router"));
+const image_router_1 = __importDefault(require("./router/image.router"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,7 +29,7 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         message: "Welcome to reservation-system. Server is running...",
     });
 }));
-app.use(user_router_1.default, auth_router_1.default, video_router_1.default);
+app.use(user_router_1.default, auth_router_1.default, video_router_1.default, image_router_1.default);
 app.use(error_middleware_1.default);
 prisma_1.default
     .$connect()
