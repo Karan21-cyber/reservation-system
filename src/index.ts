@@ -6,6 +6,7 @@ import userRouter from "./router/user.router";
 import authRouter from "./router/auth.router";
 import videoRouter from "./router/video.router";
 import imageRouter from "./router/image.router";
+import job from "./scheduler/schedular.job";
 
 const app = express();
 
@@ -19,9 +20,13 @@ app.get("/", async (req, res) => {
   });
 });
 
+//router
 app.use(userRouter, authRouter, videoRouter, imageRouter);
 
 app.use(errorMiddleware);
+
+//scheduler method invoke
+job.jobScheduler;
 
 prisma
   .$connect()

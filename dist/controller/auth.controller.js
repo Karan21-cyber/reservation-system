@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,13 +7,13 @@ const HttpException_1 = __importDefault(require("../utils/HttpException"));
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_service_1 = require("../service/user.service");
-const userLogin = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const userLogin = (0, asyncHandler_1.default)(async (req, res) => {
     const reqBody = req.body;
     const email = reqBody.email.trim().toLowerCase();
-    const user = yield (0, user_service_1.getUserByEmail)(email);
+    const user = await (0, user_service_1.getUserByEmail)(email);
     if (!user)
         throw new HttpException_1.default(400, "User not found");
-    const comparePassword = yield bcrypt_1.default.compare(reqBody === null || reqBody === void 0 ? void 0 : reqBody.password, user === null || user === void 0 ? void 0 : user.password);
+    const comparePassword = await bcrypt_1.default.compare(reqBody === null || reqBody === void 0 ? void 0 : reqBody.password, user === null || user === void 0 ? void 0 : user.password);
     if (!comparePassword)
         throw new HttpException_1.default(400, "Invalid Credential.");
     return res.status(200).json({
@@ -39,6 +30,6 @@ const userLogin = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, vo
             updatedAt: user === null || user === void 0 ? void 0 : user.updatedAt,
         },
     });
-}));
+});
 const authController = { userLogin };
 exports.default = authController;
