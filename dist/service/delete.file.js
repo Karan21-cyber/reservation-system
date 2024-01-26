@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteImage = void 0;
 const cloudinary_1 = __importDefault(require("../utils/cloudinary"));
-const get_public_id_1 = require("./get.public.id");
+const getId_service_1 = require("./getId.service");
 const deleteImage = (imageurl) => __awaiter(void 0, void 0, void 0, function* () {
-    const public_id = (0, get_public_id_1.getPublicId)(imageurl);
+    const public_id = (0, getId_service_1.getPublicId)(imageurl);
     const result = yield cloudinary_1.default.uploader.destroy(public_id, {
         invalidate: true,
     });

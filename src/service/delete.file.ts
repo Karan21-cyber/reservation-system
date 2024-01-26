@@ -1,5 +1,5 @@
 import cloudinary from "../utils/cloudinary";
-import { getPublicId } from "./get.public.id";
+import { getPublicId } from "./getId.service";
 
 export const deleteImage = async (imageurl: string) => {
   const public_id = getPublicId(imageurl);

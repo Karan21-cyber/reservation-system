@@ -4,6 +4,7 @@ import prisma from "./prisma";
 import errorMiddleware from "./middleware/error.middleware";
 import userRouter from "./router/user.router";
 import authRouter from "./router/auth.router";
+import videoRouter from "./router/video.router";
 
 const app = express();
 
@@ -17,14 +18,14 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.use(userRouter, authRouter);
+app.use(userRouter, authRouter, videoRouter);
 
 app.use(errorMiddleware);
 
 prisma
   .$connect()
   .then(() => {
-    const PORT = 4321;
+    const PORT = 3800;
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}.`);
     });
