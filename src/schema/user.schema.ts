@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as z from "zod";
 
+//Create User Schema
 export const createUserSchema = z.object({
   body: z.object({
     name: z
@@ -31,6 +32,7 @@ export const createUserSchema = z.object({
   }),
 });
 
+//update User Schema
 export const updateUserSchema = z.object({
   body: z.object({
     name: z
@@ -41,6 +43,7 @@ export const updateUserSchema = z.object({
   address: z.string().nullable(),
 });
 
+//user login UserSchema
 export const loginUserSchema = z.object({
   body: z.object({
     email: z

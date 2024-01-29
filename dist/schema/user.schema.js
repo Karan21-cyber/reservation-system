@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUserSchema = exports.updateUserSchema = exports.createUserSchema = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const z = __importStar(require("zod"));
+//Create User Schema
 exports.createUserSchema = z.object({
     body: z.object({
         name: z
@@ -55,6 +56,7 @@ exports.createUserSchema = z.object({
         address: z.string().nullable(),
     }),
 });
+//update User Schema
 exports.updateUserSchema = z.object({
     body: z.object({
         name: z
@@ -64,6 +66,7 @@ exports.updateUserSchema = z.object({
     phone: z.string().nullable(),
     address: z.string().nullable(),
 });
+//user login UserSchema
 exports.loginUserSchema = z.object({
     body: z.object({
         email: z
