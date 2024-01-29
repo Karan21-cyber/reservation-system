@@ -11,7 +11,7 @@ export const getAccessTokenAndRefereshToken = async (userId: string) => {
         id: userId,
       },
       data: {
-        refreshToken: refreshToken,
+        refreshToken: refreshToken as string,
       },
     });
 

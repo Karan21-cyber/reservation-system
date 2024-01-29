@@ -71,7 +71,7 @@ const userLogOut = asyncHandler(async (req: Request, res: Response) => {
       id: user?.id,
     },
     data: {
-      refreshToken: null,
+      refreshToken: null || undefined || "",
     },
   });
 
@@ -107,7 +107,7 @@ const refreshLogin = asyncHandler(async (req: Request, res: Response) => {
         id: user?.id,
       },
       data: {
-        refreshToken: null,
+        refreshToken: null || undefined || "",
       },
     });
 
