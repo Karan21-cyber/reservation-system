@@ -9,7 +9,7 @@ const createbooked = asyncHandler(async (req: Request, res: Response) => {
 
   const slotExist = await prisma.booked.findFirst({
     where: {
-      slotId: reqBody.slotId as string,
+      slotId: reqBody?.slotId as string,
     },
   });
 
