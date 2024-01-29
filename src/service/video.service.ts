@@ -17,7 +17,7 @@ export const videoUploader = async (filePath: string, fileName: string) => {
   const video = await client.videos.create(videoCredentialPayload);
 
   const videoUpload = await client.videos.upload(video?.videoId, filePath);
-  // remove file from upload directory
+  // remove file from upload directoryb
   fs.unlinkSync(filePath);
   return videoUpload;
 };

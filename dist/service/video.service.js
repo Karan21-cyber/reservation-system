@@ -19,7 +19,7 @@ const videoUploader = async (filePath, fileName) => {
     };
     const video = await client.videos.create(videoCredentialPayload);
     const videoUpload = await client.videos.upload(video === null || video === void 0 ? void 0 : video.videoId, filePath);
-    // remove file from upload directory
+    // remove file from upload directoryb
     fs_1.default.unlinkSync(filePath);
     return videoUpload;
 };
