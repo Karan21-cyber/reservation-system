@@ -59,7 +59,7 @@ const userLogOut = (0, asyncHandler_1.default)(async (req, res) => {
             id: user === null || user === void 0 ? void 0 : user.id,
         },
         data: {
-            refreshToken: null,
+            refreshToken: null || undefined || "",
         },
     });
     const options = { httpOnly: true, secure: true };
@@ -82,16 +82,16 @@ const refreshLogin = (0, asyncHandler_1.default)(async (req, res) => {
     if (!user)
         throw new HttpException_1.default(400, "User not found");
     const isExpired = (0, getToken_1.isRefereshTokenExpired)(user === null || user === void 0 ? void 0 : user.refreshToken);
+    const options = { httpOnly: true, secure: true };
     if (isExpired) {
         await prisma_1.default.user.update({
             where: {
                 id: user === null || user === void 0 ? void 0 : user.id,
             },
             data: {
-                refreshToken: null,
+                refreshToken: null || undefined || "",
             },
         });
-        const options = { httpOnly: true, secure: true };
         return res
             .status(401)
             .cookie("refreshToken", null, options)
@@ -103,20 +103,10 @@ const refreshLogin = (0, asyncHandler_1.default)(async (req, res) => {
     }
     else {
         const accessToken = (0, getToken_1.getAccessToken)(user === null || user === void 0 ? void 0 : user.id);
-        return res.status(200).json({
+        return res.cookie("accessToken", accessToken, options).status(200).json({
             success: true,
-            message: "User logged in successfully",
             data: {
-                id: user === null || user === void 0 ? void 0 : user.id,
-                email: user === null || user === void 0 ? void 0 : user.email,
-                name: user === null || user === void 0 ? void 0 : user.name,
-                phone: user === null || user === void 0 ? void 0 : user.phone,
-                image: user === null || user === void 0 ? void 0 : user.image,
-                address: user === null || user === void 0 ? void 0 : user.address,
-                token: accessToken,
-                refreshToken: user === null || user === void 0 ? void 0 : user.refreshToken,
-                createdAt: user === null || user === void 0 ? void 0 : user.createdAt,
-                updatedAt: user === null || user === void 0 ? void 0 : user.updatedAt,
+                accessToken,
             },
         });
     }

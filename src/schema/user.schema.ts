@@ -8,29 +8,26 @@ export const createUserSchema = z.object({
       .min(3, "Minimun 3 characters is required."),
     email: z
       .string({ required_error: "Email is required" })
-      .email("Invalid email"),
+      .email("Invalid email."),
     password: z
-      .string({ required_error: "Password is required" })
-      .refine((_value: string) => {
-        const hasUpperCase = /[A-Z]/.test(_value);
-        const hasLowerCase = /[a-z]/.test(_value);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(_value);
-        const hasNumber = /\d/.test(_value);
-
-        if (_value.length < 6) return "Password must be at least 6 characters.";
-        if (!hasUpperCase)
-          return "Password must contain at least one uppercase character.";
-        if (!hasLowerCase)
-          return "Password must contain at least one lowercase character.";
-        if (!hasSpecialChar)
-          return "Password must contain at least one special character.";
-        if (!hasNumber)
-          return "Password must contain at least one numeric character.";
+      .string({ required_error: "Password is required." })
+      .refine((value: string) => value.length > 6, {
+        message: "Password must be at least 6 characters.",
+      })
+      .refine((value: string) => /[A-Z]/.test(value), {
+        message: "Password must contain at least one uppercase character.",
+      })
+      .refine((value: string) => /[a-z]/.test(value), {
+        message: "Password must contain at least one lowercase character.",
+      })
+      .refine((value: string) => /\d/.test(value), {
+        message: "Password must contain at least one number.",
+      })
+      .refine((value: string) => /[!@#$%^&*(),.?":{}|<>]/.test(value), {
+        message: "Password must contain at least one special character.",
       }),
     phone: z.string().nullable(),
     address: z.string().nullable(),
-    image: z.string().nullable(),
-    refreshToken: z.string().nullable(),
   }),
 });
 
@@ -47,25 +44,24 @@ export const updateUserSchema = z.object({
 export const loginUserSchema = z.object({
   body: z.object({
     email: z
-      .string({ required_error: "Email is required" })
-      .email("Invalid email"),
+      .string({ required_error: "Email is required." })
+      .email("Invalid email."),
     password: z
-      .string({ required_error: "Password is required" })
-      .refine((_value: string) => {
-        const hasUpperCase = /[A-Z]/.test(_value);
-        const hasLowerCase = /[a-z]/.test(_value);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(_value);
-        const hasNumber = /\d/.test(_value);
-
-        if (_value.length < 6) return "Password must be at least 6 characters.";
-        if (!hasUpperCase)
-          return "Password must contain at least one uppercase character.";
-        if (!hasLowerCase)
-          return "Password must contain at least one lowercase character.";
-        if (!hasSpecialChar)
-          return "Password must contain at least one special character.";
-        if (!hasNumber)
-          return "Password must contain at least one numeric character.";
+      .string({ required_error: "Password is required." })
+      .refine((value: string) => value.length > 6, {
+        message: "Password must be at least 6 characters.",
+      })
+      .refine((value: string) => /[A-Z]/.test(value), {
+        message: "Password must contain at least one uppercase character.",
+      })
+      .refine((value: string) => /[a-z]/.test(value), {
+        message: "Password must contain at least one lowercase character.",
+      })
+      .refine((value: string) => /\d/.test(value), {
+        message: "Password must contain at least one number.",
+      })
+      .refine((value: string) => /[!@#$%^&*(),.?":{}|<>]/.test(value), {
+        message: "Password must contain at least one special character.",
       }),
   }),
 });

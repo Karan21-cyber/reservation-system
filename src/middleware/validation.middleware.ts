@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response, NextFunction } from "express";
-import { type AnyZodObject } from "zod";
+import { AnyZodObject } from "zod";
 
 const validationMiddleware = (schema: AnyZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -10,12 +11,11 @@ const validationMiddleware = (schema: AnyZodObject) => {
         query: req.query,
       });
       next();
-    } catch (error: unknown) {
-      console.log(error);
+    } catch (error: any) {
       return res.status(400).json({
         success: false,
-        message:
-          error instanceof Error ? error.message : "Something went wrong",
+        message: error.issues[0]?.message,
+        issues: error.issues,
       });
     }
   };
