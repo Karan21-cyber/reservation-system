@@ -11,6 +11,9 @@ const delete_file_1 = require("../service/delete.file");
 const upload_file_1 = require("../service/upload.file");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_service_1 = require("../service/user.service");
+const form_data_1 = __importDefault(require("form-data"));
+const mailgun_js_1 = __importDefault(require("mailgun.js"));
+const mail_template_1 = require("../service/mail-template");
 const createUser = (0, asyncHandler_1.default)(async (req, res) => {
     const reqBody = req.body;
     const email = reqBody.email.trim().toLowerCase();
@@ -98,10 +101,53 @@ const getAllUser = (0, asyncHandler_1.default)(async (req, res) => {
         data: users,
     });
 });
+const sendMail = (0, asyncHandler_1.default)(async (req, res) => {
+    const { email, name } = req.body;
+    if (!email)
+        throw new HttpException_1.default(400, "Email is required");
+    if (!name)
+        throw new HttpException_1.default(400, "Name is required");
+    const mailgun = new mailgun_js_1.default(form_data_1.default);
+    const client = mailgun.client({
+        username: "api",
+        key: process.env.MAILGUN_API_KEY,
+    });
+    console.log();
+    const messageData = {
+        from: "karan.chaudhary@aitc.ai",
+        to: [`${email}`],
+        subject: "Hello",
+        text: "Testing some Mailgun awesomeness!",
+        html: (0, mail_template_1.mail_template)(name),
+    };
+    try {
+        const mailsend = await client.messages.create("sandbox2156b3bce62847a9b285fdf36bc12b33.mailgun.org", messageData);
+        return res.status(200).json({
+            success: true,
+            message: "Mail sent successfully",
+            data: mailsend,
+        });
+    }
+    catch (error) {
+        console.error("Mailgun API Error:", error);
+        if (error.response && error.response.status === 401) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized: Please check your Mailgun API credentials.",
+            });
+        }
+        return res.status(500).json({
+            success: false,
+            message: "Error sending mail",
+            error: error.message,
+        });
+    }
+});
 const userController = {
     createUser,
     uploadImage,
     getUserById,
     getAllUser,
+    sendMail,
 };
 exports.default = userController;

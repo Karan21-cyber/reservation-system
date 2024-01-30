@@ -25,6 +25,8 @@ router.put(
   userController.uploadImage
 );
 
+router.post("/v1/sendmail", userController.sendMail);
+
 const userRouter = router;
 
 export default userRouter;

@@ -11,7 +11,7 @@ const createbooked = (0, asyncHandler_1.default)(async (req, res) => {
     const reqBody = req.body;
     const slotExist = await prisma_1.default.booked.findFirst({
         where: {
-            slotId: reqBody.slotId,
+            slotId: reqBody === null || reqBody === void 0 ? void 0 : reqBody.slotId,
         },
     });
     if (slotExist)

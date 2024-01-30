@@ -20,6 +20,7 @@ app.get("/", async (req, res) => {
   });
 });
 
+
 //router
 app.use(userRouter, authRouter, videoRouter, imageRouter);
 
