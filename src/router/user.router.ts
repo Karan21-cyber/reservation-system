@@ -25,7 +25,9 @@ router.put(
   userController.uploadImage
 );
 
-router.post("/v1/sendmail", userController.sendMail);
+router.post("/v1/sendmail/mailgun", userController.sendMail);
+
+router.post("/v1/sendmail/nodemailer", userController.sendNodemailer);
 
 const userRouter = router;
 

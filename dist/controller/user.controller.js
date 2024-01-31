@@ -13,6 +13,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_service_1 = require("../service/user.service");
 const form_data_1 = __importDefault(require("form-data"));
 const mailgun_js_1 = __importDefault(require("mailgun.js"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const mail_template_1 = require("../service/mail-template");
 const createUser = (0, asyncHandler_1.default)(async (req, res) => {
     const reqBody = req.body;
@@ -143,11 +144,42 @@ const sendMail = (0, asyncHandler_1.default)(async (req, res) => {
         });
     }
 });
+const sendNodemailer = (0, asyncHandler_1.default)(async (req, res) => {
+    const { name, email } = req.body;
+    if (!email)
+        throw new HttpException_1.default(400, "Email is required");
+    if (!name)
+        throw new HttpException_1.default(400, "Name is required");
+    const transporter = nodemailer_1.default.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: false,
+        service: "gmail",
+        auth: {
+            user: process.env.USER_MAIL,
+            pass: process.env.PASSWORD_MAIL,
+        },
+    });
+    const mailsend = await transporter.sendMail({
+        from: process.env.USER_MAIL,
+        to: `${email}`,
+        subject: "Testing mail from nodemailer",
+        text: `Hello ${name},\n\nThis is a test email sent from nodemailer.`,
+        html: (0, mail_template_1.mail_template)(name),
+    });
+    if (!mailsend)
+        throw new HttpException_1.default(500, "Error sending mail");
+    return res.status(200).json({
+        success: true,
+        message: "Mail sent successfully",
+    });
+});
 const userController = {
     createUser,
     uploadImage,
     getUserById,
     getAllUser,
     sendMail,
+    sendNodemailer,
 };
 exports.default = userController;

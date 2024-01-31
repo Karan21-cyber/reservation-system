@@ -14,6 +14,7 @@ router.get("/v1/user/:id", user_controller_1.default.getUserById);
 router.get("/v1/user", user_controller_1.default.getAllUser);
 router.put("/v1/user/:id", (0, validation_middleware_1.default)(user_schema_1.updateUserSchema), user_controller_1.default.uploadImage);
 router.put("/v1/user/image/:id", upload_file_1.default.single("image"), user_controller_1.default.uploadImage);
-router.post("/v1/sendmail", user_controller_1.default.sendMail);
+router.post("/v1/sendmail/mailgun", user_controller_1.default.sendMail);
+router.post("/v1/sendmail/nodemailer", user_controller_1.default.sendNodemailer);
 const userRouter = router;
 exports.default = userRouter;

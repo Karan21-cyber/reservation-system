@@ -10,6 +10,7 @@ import { getUserByEmail, getUserDataById } from "../service/user.service";
 
 import formData from "form-data";
 import Mailgun from "mailgun.js";
+import nodemailer from "nodemailer";
 import { mail_template } from "../service/mail-template";
 
 const createUser = asyncHandler(async (req: Request, res: Response) => {
@@ -169,12 +170,45 @@ const sendMail = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+const sendNodemailer = asyncHandler(async (req: Request, res: Response) => {
+  const { name, email } = req.body;
+
+  if (!email) throw new HttpException(400, "Email is required");
+  if (!name) throw new HttpException(400, "Name is required");
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: false,
+    service: "gmail",
+    auth: {
+      user: process.env.USER_MAIL as string,
+      pass: process.env.PASSWORD_MAIL as string,
+    },
+  });
+
+  const mailsend = await transporter.sendMail({
+    from: process.env.USER_MAIL as string,
+    to: `${email as string}`,
+    subject: "Testing mail from nodemailer",
+    text: `Hello ${name},\n\nThis is a test email sent from nodemailer.`,
+    html: mail_template(name),
+  });
+
+  if (!mailsend) throw new HttpException(500, "Error sending mail");
+
+  return res.status(200).json({
+    success: true,
+    message: "Mail sent successfully",
+  });
+});
+
 const userController = {
   createUser,
   uploadImage,
   getUserById,
   getAllUser,
   sendMail,
+  sendNodemailer,
 };
 
 export default userController;
